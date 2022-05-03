@@ -1,2 +1,1 @@
-# dev-ttt
-Tic-Tac-Toe
+# Tic-Tac-Toe
