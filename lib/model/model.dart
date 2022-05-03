@@ -1,5 +1,5 @@
 enum Sq { Z, X, O }
-enum St { Invalid, Move, Win, Tie }
+enum St { Move, Win, Tie }
 
 Sq _opp(Sq a) =>
   a == Sq.Z ? Sq.Z :
@@ -29,9 +29,15 @@ St _status(Sq w, List<Sq> bd) {
   return St.Tie;
 }
 
+class InvalidMove implements Exception {
+  final Sq _player;
+  final int _pos;
+  InvalidMove(this._player, this._pos);
+  toString() => 'InvalidMove: ${_player} attempted to play at ${_pos}.';
+}
+
 class TTT {
   static final TTT init = TTT._(St.Move, Sq.X, Sq.Z, List<Sq>.filled(9,Sq.Z));
-  bool get isValid => _st != St.Invalid;
   bool get isOver => _st != St.Move;
   Sq get player => _player;
   Sq get winner => _winner;
@@ -45,7 +51,7 @@ class TTT {
 
   TTT move(int i) {
     if (isOver || i < 0 || i > 8 || square(i) != Sq.Z) {
-      return TTT._(St.Invalid, Sq.Z, Sq.Z, _board);
+      throw InvalidMove(_player, i);
     } else {
       var board = [..._board]..replaceRange(i,i+1,[_player]);
       St st = _status(_player, board);
