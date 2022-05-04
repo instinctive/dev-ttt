@@ -33,7 +33,7 @@ class InvalidMove implements Exception {
   final Sq _player;
   final int _pos;
   InvalidMove(this._player, this._pos);
-  toString() => 'InvalidMove: ${_player} attempted to play at ${_pos}.';
+  toString() => 'InvalidMove: $_player attempted to play at $_pos.';
 }
 
 class TTT {
