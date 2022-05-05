@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 // import 'package:ttt/model/model.dart';
-import 'package:ttt/ttt/ttt_ui.dart';
+import 'package:ttt/ttt/ttt_view.dart';
 
 void main() {
   runApp(const MyApp());
@@ -18,7 +18,7 @@ class MyApp extends StatelessWidget {
         appBar: AppBar(
           title: const Text('Tic-Tac-Toe (ui visual only)'),
         ),
-        body: const TicTacToeUI(),
+        body: const TicTacToeView(),
       ),
     );
   }

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-class TicTacToeUI extends StatelessWidget {
-  const TicTacToeUI({Key? key}): super(key: key);
+class TicTacToeView extends StatelessWidget {
+  const TicTacToeView({Key? key}): super(key: key);
 
   @override
   Widget build(BuildContext context) {
