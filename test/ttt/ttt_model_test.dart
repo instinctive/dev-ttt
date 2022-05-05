@@ -1,6 +1,6 @@
 import 'package:test/test.dart';
 
-import 'package:ttt/model/model.dart';
+import 'package:ttt/ttt/ttt_model.dart';
 
 void main() {
   var ttt = TTT.init;
