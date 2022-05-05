@@ -38,7 +38,7 @@ class InvalidMove implements Exception {
   toString() => 'InvalidMove at $_pos: $_err.';
 }
 
-/// The state of the game.
+/// A game of Tic-Tac-Toe.
 /// The squares of the board are indexed from 0-8:
 ///
 ///     +---+---+---+
@@ -49,14 +49,14 @@ class InvalidMove implements Exception {
 ///     | 6 | 7 | 8 |
 ///     +---+---+---+
 ///
-class TTT {
+class TicTacToe {
   final Status _st;
   final Player _player;
   final List<Player> _board;
-  const TTT._(this._st, this._player, this._board);
+  const TicTacToe._(this._st, this._player, this._board);
 
   /// The initial state of the game.
-  static final TTT init = TTT._(
+  static final TicTacToe init = TicTacToe._(
       Status.move,
       Player.x,
       List<Player>.filled(9,Player.none)
@@ -66,13 +66,13 @@ class TTT {
   Player square(int i) => _board[i];
 
   /// Play a move by the current player at this square.
-  TTT move(int i) {
+  TicTacToe move(int i) {
     if (_st != Status.move)       throw InvalidMove(i, 'game is over');
     if (i < 0 || i > 8)           throw InvalidMove(i, 'out of bounds');
     if (square(i) != Player.none) throw InvalidMove(i, 'square is taken');
     var board = [..._board]..replaceRange(i,i+1,[_player]);
     Status st = _status(_player, board);
-    return TTT._(
+    return TicTacToe._(
         st,
         st == Status.tie ? Player.none :
         st == Status.win ? _player : _opp(_player),
