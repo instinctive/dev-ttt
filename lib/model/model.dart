@@ -1,18 +1,18 @@
-enum Sq { Z, X, O }
-enum St { Move, Win, Tie }
+enum Player { none, x, o }
+enum Status { move, win, tie }
 
-Sq _opp(Sq a) =>
-  a == Sq.Z ? Sq.Z :
-  a == Sq.X ? Sq.O : Sq.X;
+Player _opp(Player a) =>
+  a == Player.none ? Player.none :
+  a == Player.x ? Player.o : Player.x;
 
-bool _isWin(Sq w, List<Sq> bd, List<int> ii) {
+bool _isWin(Player w, List<Player> bd, List<int> ii) {
   for (var i in ii) {
     if (bd[i] != w) return false;
   }
   return true;
 }
 
-St _status(Sq w, List<Sq> bd) {
+Status _status(Player w, List<Player> bd) {
   if (_isWin(w,bd,[0,1,2]) ||
       _isWin(w,bd,[3,4,5]) ||
       _isWin(w,bd,[6,7,8]) ||
@@ -21,45 +21,61 @@ St _status(Sq w, List<Sq> bd) {
       _isWin(w,bd,[2,5,8]) ||
       _isWin(w,bd,[0,4,8]) ||
       _isWin(w,bd,[2,4,6])) {
-    return St.Win;
+    return Status.win;
   }
   for (int i=0; i<9; i++) {
-    if (bd[i] == Sq.Z) return St.Move;
+    if (bd[i] == Player.none) return Status.move;
   }
-  return St.Tie;
+  return Status.tie;
 }
 
 class InvalidMove implements Exception {
-  final Sq _player;
   final int _pos;
-  InvalidMove(this._player, this._pos);
-  toString() => 'InvalidMove: $_player attempted to play at $_pos.';
+  final String _err;
+  InvalidMove(this._pos, this._err);
+
+  @override
+  toString() => 'InvalidMove at $_pos: $_err.';
 }
 
+/// The state of the game.
+/// The squares of the board are indexed from 0-8:
+///
+///     +---+---+---+
+///     | 0 | 1 | 2 |
+///     +---+---+---+
+///     | 3 | 4 | 5 |
+///     +---+---+---+
+///     | 6 | 7 | 8 |
+///     +---+---+---+
+///
 class TTT {
-  static final TTT init = TTT._(St.Move, Sq.X, Sq.Z, List<Sq>.filled(9,Sq.Z));
-  bool get isOver => _st != St.Move;
-  Sq get player => _player;
-  Sq get winner => _winner;
-  Sq square(int i) => _board[i];
+  final Status _st;
+  final Player _player;
+  final List<Player> _board;
+  const TTT._(this._st, this._player, this._board);
 
-  final St _st;
-  final Sq _player;
-  final Sq _winner;
-  final List<Sq> _board;
-  TTT._(this._st, this._player, this._winner, this._board);
+  /// The initial state of the game.
+  static final TTT init = TTT._(
+      Status.move,
+      Player.x,
+      List<Player>.filled(9,Player.none)
+  );
+  Status get status => _st;
+  Player get player => _player;
+  Player square(int i) => _board[i];
 
+  /// Play a move by the current player at this square.
   TTT move(int i) {
-    if (isOver || i < 0 || i > 8 || square(i) != Sq.Z) {
-      throw InvalidMove(_player, i);
-    } else {
-      var board = [..._board]..replaceRange(i,i+1,[_player]);
-      St st = _status(_player, board);
-      return TTT._(
-          st,
-          st != St.Move ? Sq.Z : _opp(_player),
-          st != St.Win  ? Sq.Z : _player,
-          board);
-    }
+    if (_st != Status.move)       throw InvalidMove(i, 'game is over');
+    if (i < 0 || i > 8)           throw InvalidMove(i, 'out of bounds');
+    if (square(i) != Player.none) throw InvalidMove(i, 'square is taken');
+    var board = [..._board]..replaceRange(i,i+1,[_player]);
+    Status st = _status(_player, board);
+    return TTT._(
+        st,
+        st == Status.tie ? Player.none :
+        st == Status.win ? _player : _opp(_player),
+        board);
   }
 }
