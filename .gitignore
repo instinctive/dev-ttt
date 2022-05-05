@@ -1,8 +1,9 @@
-pubspec.lock
-.packages
 .dart_tool/
 .idea/
-.metadata
 build/
+doc/
 web/
+.metadata
+.packages
+pubspec.lock
 ttt.iml
