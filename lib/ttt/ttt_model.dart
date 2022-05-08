@@ -78,4 +78,10 @@ class TicTacToe {
         st == Status.win ? _player : _opp(_player),
         board);
   }
+
+  @override
+  String toString() =>
+    'TicTacToe(${_st.name}, '
+    '${_player.name}, '
+    '${_board.map((p) => p == Player.none ? '_' : p.name).join()})';
 }
