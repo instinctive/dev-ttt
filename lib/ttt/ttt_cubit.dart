@@ -1,4 +1,5 @@
 import 'package:bloc/bloc.dart';
+import 'package:flutter/foundation.dart';
 
 import 'package:ttt/ttt/ttt_model.dart';
 
@@ -9,7 +10,7 @@ class TicTacToeCubit extends Cubit<TicTacToe> {
     try {
       emit(state.move(i));
     } on InvalidMove catch (e) {
-      print(e);
+      debugPrint(e.toString());
     }
   }
 }
