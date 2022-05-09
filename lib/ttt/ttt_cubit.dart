@@ -8,7 +8,8 @@ class TicTacToeCubit extends Cubit<TicTacToe> {
   void move(int i) {
     try {
       emit(state.move(i));
-    } on InvalidMove catch (_) {
+    } on InvalidMove catch (e) {
+      print(e);
     }
   }
 }
