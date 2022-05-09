@@ -1,6 +1,6 @@
 import 'package:bloc/bloc.dart';
 
-class TicTacToeObserver extends BlocObserver {
+class MainObserver extends BlocObserver {
   @override
   void onChange(BlocBase bloc, Change change) {
     print(
